@@ -55,11 +55,11 @@ public class SquaresExample extends GUI {
 		while (i --> 0) {
 			if (squares.get(i).contains(e.getX(), e.getY())) {
 				squares.remove(i);
+				getTextOutputArea().append("\nsquares remaining: " + squares.size());
 				break;
 			}
 		}
 
-		getTextOutputArea().append("\nsquares remaining: " + squares.size());
 	}
 
 	@Override

@@ -48,7 +48,7 @@ public abstract class GUI {
 	 */
 	public enum Move {
 		NORTH, SOUTH, EAST, WEST, ZOOM_IN, ZOOM_OUT
-	};
+	}
 
 	// these are the methods you need to implement.
 
