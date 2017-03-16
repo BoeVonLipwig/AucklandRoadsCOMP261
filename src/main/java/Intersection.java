@@ -1,6 +1,7 @@
+
 /**
- * Created by sdmsi
- * CGRA 151
+ * Created by Shaun Sinclair
+ * COMP261
  * 16/03/2017.
  */
 public class Intersection {

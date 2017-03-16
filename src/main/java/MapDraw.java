@@ -1,8 +1,3 @@
-/**
- * Created by sdmsi
- * CGRA 151
- * 15/03/2017.
- */
 
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -14,12 +9,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+/**
+  Created by Shaun Sinclair
+  COMP 261
+  15/03/2017.
+ **/
+
 public class MapDraw extends GUI {
-    List<Intersection> intersetions = new ArrayList<Intersection>();
+    List<Intersection> intersections = new ArrayList<>();
     HashMap<Integer, Road> roads = new HashMap<>();
 
     public MapDraw() {
-        intersetions.clear();
+        intersections.clear();
         redraw();
     }
 
@@ -49,7 +50,7 @@ public class MapDraw extends GUI {
             while ((line = f.readLine()) != null) {
                 //tokens are separated by tabs
                 tokens = line.split("/t");
-                intersetions.add(new Intersection(new Location(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2])), Integer.parseInt(tokens[0])));
+                intersections.add(new Intersection(new Location(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2])), Integer.parseInt(tokens[0])));
             }
             f.close();
             f = new BufferedReader(new FileReader(roadlist));
@@ -83,7 +84,6 @@ public class MapDraw extends GUI {
                 f = new BufferedReader(new FileReader(polygons));
                 while ((line = f.readLine()) != null) {
                     tokens = line.split("/t");
-
                 }
                 f.close();
             }

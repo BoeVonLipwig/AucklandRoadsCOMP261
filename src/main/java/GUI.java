@@ -1,32 +1,9 @@
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.io.File;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.DefaultCaret;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
 
 /**
  * This is a template GUI that you can use for your mapping program. It is an
@@ -183,115 +160,98 @@ public abstract class GUI {
 		// with swing. the quit button isn't really necessary, as you can just
 		// press the frame's close button, but it serves as a nice example.
 		JButton quit = new JButton("Quit");
-		quit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				System.exit(0); // cleanly end the program.
-			}
-		});
+		quit.addActionListener(ev -> {
+            System.exit(0); // cleanly end the program.
+        });
 
 		fileChooser = new JFileChooser();
 		JButton load = new JButton("Load");
-		load.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				File nodes = null, roads = null, segments = null, polygons = null;
+		load.addActionListener(ev -> {
+            File nodes = null, roads = null, segments = null, polygons = null;
 
-				// set up the file chooser
-				fileChooser.setCurrentDirectory(new File("."));
-				fileChooser.setDialogTitle("Select input directory");
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            // set up the file chooser
+            fileChooser.setCurrentDirectory(new File("."));
+            fileChooser.setDialogTitle("Select input directory");
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-				// run the file chooser and check the user didn't hit cancel
-				if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
-					// get the files in the selected directory and match them to
-					// the files we need.
-					File directory = fileChooser.getSelectedFile();
-					File[] files = directory.listFiles();
+            // run the file chooser and check the user didn't hit cancel
+            if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
+                // get the files in the selected directory and match them to
+                // the files we need.
+                File directory = fileChooser.getSelectedFile();
+                File[] files = directory.listFiles();
 
-					for (File f : files) {
-						if (f.getName().equals(NODES_FILENAME)) {
-							nodes = f;
-						} else if (f.getName().equals(ROADS_FILENAME)) {
-							roads = f;
-						} else if (f.getName().equals(SEGS_FILENAME)) {
-							segments = f;
-						} else if (f.getName().equals(POLYS_FILENAME)) {
-							polygons = f;
-						}
-					}
+assert files != null;
+for (File f : files) {
+                    if (f.getName().equals(NODES_FILENAME)) {
+                        nodes = f;
+                    } else if (f.getName().equals(ROADS_FILENAME)) {
+                        roads = f;
+                    } else if (f.getName().equals(SEGS_FILENAME)) {
+                        segments = f;
+                    } else if (f.getName().equals(POLYS_FILENAME)) {
+                        polygons = f;
+                    }
+                }
 
-					// check none of the files are missing, and call the load
-					// method in your code.
-					if (nodes == null || roads == null || segments == null) {
-						JOptionPane.showMessageDialog(frame,
-								"Directory does not contain correct files",
-								"Error", JOptionPane.ERROR_MESSAGE);
-					} else {
-						onLoad(nodes, roads, segments, polygons);
-						redraw();
-					}
-				}
-			}
-		});
+                // check none of the files are missing, and call the load
+                // method in your code.
+                if (nodes == null || roads == null || segments == null) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Directory does not contain correct files",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    onLoad(nodes, roads, segments, polygons);
+                    redraw();
+                }
+            }
+        });
 
 		JButton west = new JButton("\u2190");
-		west.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				onMove(Move.WEST);
-				redraw();
-			}
-		});
+		west.addActionListener(ev -> {
+            onMove(Move.WEST);
+            redraw();
+        });
 
 		JButton east = new JButton("\u2192");
-		east.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				onMove(Move.EAST);
-				redraw();
-			}
-		});
+		east.addActionListener(ev -> {
+            onMove(Move.EAST);
+            redraw();
+        });
 
 		JButton north = new JButton("\u2191");
-		north.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				onMove(Move.NORTH);
-				redraw();
-			}
-		});
+		north.addActionListener(ev -> {
+            onMove(Move.NORTH);
+            redraw();
+        });
 
 		JButton south = new JButton("\u2193");
-		south.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				onMove(Move.SOUTH);
-				redraw();
-			}
-		});
+		south.addActionListener(ev -> {
+            onMove(Move.SOUTH);
+            redraw();
+        });
 
 		JButton in = new JButton("+");
-		in.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				onMove(Move.ZOOM_IN);
-				redraw();
-			}
-		});
+		in.addActionListener(ev -> {
+            onMove(Move.ZOOM_IN);
+            redraw();
+        });
 
 		JButton out = new JButton("\u2012");
-		out.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				onMove(Move.ZOOM_OUT);
-				redraw();
-			}
-		});
+		out.addActionListener(ev -> {
+            onMove(Move.ZOOM_OUT);
+            redraw();
+        });
 
 		// next, make the search box at the top-right. we manually fix
 		// it's size, and add an action listener to call your code when
 		// the user presses enter.
 		search = new JTextField(SEARCH_COLS);
 		search.setMaximumSize(new Dimension(0, 25));
-		search.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				onSearch();
-				redraw();
-			}
-		});
+		search.addActionListener(e -> {
+            onSearch();
+            redraw();
+        });
 
 		if (UPDATE_ON_EVERY_CHARACTER) {
 			// this forces an action event to fire on every key press, so the
