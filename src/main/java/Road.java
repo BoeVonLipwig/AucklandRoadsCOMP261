@@ -20,8 +20,12 @@ public class Road {
         name = label;
     }
 
-    public List<Segment> getSegs() {
+    List<Segment> getSegs() {
         return segs;
+    }
+
+    public void addSegs(Segment seg) {
+        segs.add(seg);
     }
 
     public boolean highlight(boolean toggle){

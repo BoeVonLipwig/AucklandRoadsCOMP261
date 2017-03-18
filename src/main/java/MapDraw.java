@@ -13,12 +13,11 @@ import java.util.*;
  **/
 
 public class MapDraw extends GUI {
-    List<Intersection> intersections = new ArrayList<>();
-    HashMap<Integer, Road> roads = new HashMap<>();
-    Set<Segment> segs = new HashSet<>();
-    Location origin = new Location(-7, 0);
+    private List<Intersection> intersections = new ArrayList<>();
+    private HashMap<Integer, Road> roads = new HashMap<>();
+    private Set<Segment> segs = new HashSet<>();
+    private Location origin = new Location(-7, 0);
     private double zoom =50;
-    int moveBy = 5;
 
     public MapDraw() {
         intersections.clear();
@@ -41,27 +40,27 @@ public class MapDraw extends GUI {
     }
 
     protected void onMove(Move m) {
+        int moveBy = 5;
         switch (m) {
             case NORTH:
-                origin = origin.moveBy(0, moveBy/(zoom/4));
+                origin = origin.moveBy(0, moveBy /(zoom/4));
                 break;
             case EAST:
-                origin = origin.moveBy(moveBy/(zoom/4), 0);
+                origin = origin.moveBy(moveBy /(zoom/4), 0);
                 break;
             case SOUTH:
-                origin = origin.moveBy(0, -moveBy/(zoom/4));
+                origin = origin.moveBy(0, -moveBy /(zoom/4));
                 break;
             case WEST:
-                origin = origin.moveBy(-moveBy/(zoom/4), 0);
+                origin = origin.moveBy(-moveBy /(zoom/4), 0);
                 break;
             case ZOOM_IN:
-                zoom += 1;
+                zoom += 2;
                 break;
             case ZOOM_OUT:
-                zoom -= 1;
+                zoom -= 2;
                 break;
         }
-        System.out.println("zoom: "+zoom+"\n"+"Location: "+origin.toString());
     }
 
     protected void onLoad(File nodes, File roadlist, File segments, File polygons) {
@@ -77,6 +76,7 @@ public class MapDraw extends GUI {
                 intersections.add(new Intersection(Location.newFromLatLon(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2])), Integer.parseInt(tokens[0])));
             }
             f.close();
+            //Adds roads to the roads hash map based on their road id
             f = new BufferedReader(new FileReader(roadlist));
             //skips first line as that contains the titles
             f.readLine();
@@ -96,16 +96,16 @@ public class MapDraw extends GUI {
             f.close();
             f = new BufferedReader(new FileReader(segments));
             f.readLine();
-            Segment curSeg;
+            Segment tempSeg;
+            List<Segment> curSegs= new ArrayList<>();
             while ((line = f.readLine()) != null) {
                 tokens = line.split("\t");
                 for (int i = 4; i < tokens.length - 1; i += 2) {
                     locations.add(Location.newFromLatLon(Double.parseDouble(tokens[i]), Double.parseDouble(tokens[i + 1])));
                 }
-                curSeg=new Segment(Double.parseDouble(tokens[1]), Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3]), locations);
-                System.out.println(roads.containsKey(Integer.parseInt(tokens[0]))+"\n"+Integer.parseInt(tokens[0]));
-                roads.get(Integer.parseInt(tokens[0])).getSegs().add(curSeg);
-                segs.add(curSeg);
+                tempSeg=new Segment(Double.parseDouble(tokens[1]), Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3]), locations);
+                roads.get(Integer.parseInt(tokens[0])).addSegs(tempSeg);
+                segs.add(tempSeg);
                 locations.clear();
             }
             f.close();
