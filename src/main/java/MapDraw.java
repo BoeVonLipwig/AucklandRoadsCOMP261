@@ -16,7 +16,7 @@ import java.util.List;
 
 public class MapDraw extends GUI {
     private Trie trie = new Trie();
-    private List<Intersection> intersections = new ArrayList<Intersection>();
+    private List<Intersection> intersections = new ArrayList<>();
     private HashMap<Integer, Road> roads = new HashMap<>();
     private HashMap<String, Integer> roadNames = new HashMap<>();
     private List<Road> highlighted = new ArrayList<>();
