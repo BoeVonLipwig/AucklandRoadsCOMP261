@@ -22,9 +22,16 @@ class Segment {
         this.coords.addAll(coords);
     }
 
+    public int getNode1() {
+        return node1;
+    }
+
+    public int getNode2() {
+        return node2;
+    }
 
     public void draw(boolean highlighted, Graphics g, Location orign, double zoom) {
-        g.setColor(highlighted ? Color.BLACK : Color.RED);
+        g.setColor(highlighted ? Color.GREEN : Color.BLACK);
         for (int i = 0; i < coords.size()-1; i ++) {
             Point p1 = coords.get(i).asPoint(orign, zoom);
             Point p2 = coords.get(i + 1).asPoint(orign, zoom);
