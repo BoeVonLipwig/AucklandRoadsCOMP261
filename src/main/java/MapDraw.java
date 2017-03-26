@@ -83,6 +83,7 @@ public class MapDraw extends GUI {
     }
 
     protected void onSearch() {
+        if(Objects.equals(getSearchBox().getText(), null)|| Objects.equals(getSearchBox().getText(), ""))return;
         highlighted.forEach(road -> road.highlight(false));
         highlighted.clear();
         StringBuilder output = new StringBuilder();
