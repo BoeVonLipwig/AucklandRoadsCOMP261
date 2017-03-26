@@ -17,7 +17,8 @@ class Segment {
     @SuppressWarnings("SpellCheckingInspection")
     private List<Location> coords = new ArrayList<>();
 
-    Segment(double length, int node1, int node2, @SuppressWarnings("SpellCheckingInspection") List<Location> coords) {
+    @SuppressWarnings("SpellCheckingInspection")
+    Segment(double length, int node1, int node2, List<Location> coords) {
         this.length = length;
         this.node1 = node1;
         this.node2 = node2;
@@ -32,11 +33,11 @@ class Segment {
         return node2;
     }
 
-    void draw(boolean highlighted, Graphics g, Location orign, double zoom) {
+    void draw(boolean highlighted, Graphics g, Location origin, double zoom) {
         g.setColor(highlighted ? Color.GREEN : Color.BLACK);
-        for (int i = 0; i < coords.size()-1; i ++) {
-            Point p1 = coords.get(i).asPoint(orign, zoom);
-            Point p2 = coords.get(i + 1).asPoint(orign, zoom);
+        for (int i = 0; i < coords.size() - 1; i++) {
+            Point p1 = coords.get(i).asPoint(origin, zoom);
+            Point p2 = coords.get(i + 1).asPoint(origin, zoom);
             g.drawLine(p1.x, p1.y, p2.x, p2.y);
         }
 

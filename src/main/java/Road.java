@@ -19,7 +19,7 @@ public class Road {
 
     //some of these are not used but may be later so i have put them in regardless
     @SuppressWarnings("unused")
-    Road(int roadId, int type, String label, String city, boolean oneWay, int speed, int roadclass, boolean car, boolean pedestrain, boolean bicyle) {
+    Road(int roadId, int type, String label, String city, boolean oneWay, int speed, int roadClass, boolean car, boolean pedestrian, boolean bicycle) {
         this.type = type;
         this.roadId = roadId;
         name = city +"\n"+ label;
@@ -29,11 +29,13 @@ public class Road {
         segs.forEach(segment -> segment.draw(highlighted, g ,origin, zoom));
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     List<Segment> getSegs() {
         return segs;
     }
 
 
+    @SuppressWarnings("SpellCheckingInspection")
     void addSegs(Segment seg) {
         segs.add(seg);
     }

@@ -30,11 +30,10 @@ public class MapDraw extends GUI {
         redraw();
     }
 
-
     protected void redraw(Graphics g) {
         g.translate(
-                getDrawingAreaDimension().width/2,
-                getDrawingAreaDimension().height/2);
+                getDrawingAreaDimension().width / 2,
+                getDrawingAreaDimension().height / 2);
         roads.values().forEach(r -> r.draw(g, origin, zoom));
         intersections.forEach(i -> i.draw(true, g, origin, zoom));
         if (selectedIntersection != null) {
@@ -180,7 +179,6 @@ public class MapDraw extends GUI {
             e.printStackTrace();
         }
     }
-
 
     public static void main(String[] args) {
         new MapDraw();
