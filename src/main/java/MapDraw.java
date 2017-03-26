@@ -20,22 +20,27 @@ public class MapDraw extends GUI {
     private HashMap<Integer, Road> roads = new HashMap<>();
     private HashMap<String, Integer> roadNames = new HashMap<>();
     private List<Road> highlighted = new ArrayList<>();
-    private Set<Segment> segments = new HashSet<>();
     private Intersection selectedIntersection;
     private Location origin = new Location(-7, 0);
-    private double zoom = 50;
-    private static final int moveBy = 5;
+    private int zoom = 50;
+    private static final double moveBy = 1.4;
 
+    @SuppressWarnings("WeakerAccess")
     public MapDraw() {
         redraw();
     }
 
+
     protected void redraw(Graphics g) {
+        g.translate(
+                getDrawingAreaDimension().width/2,
+                getDrawingAreaDimension().height/2);
         roads.values().forEach(r -> r.draw(g, origin, zoom));
         intersections.forEach(i -> i.draw(true, g, origin, zoom));
         if (selectedIntersection != null) {
-            String output = printIntersectionInfo();
-            getTextOutputArea().setText(output != null ? output : "");
+
+            StringBuilder output = printIntersectionInfo();
+            getTextOutputArea().setText(output.toString());
             selectedIntersection.draw(false, g, origin, zoom);
         }
     }
@@ -52,20 +57,30 @@ public class MapDraw extends GUI {
         }
     }
 
-    private String printIntersectionInfo() {
+    private StringBuilder printIntersectionInfo() {
         int id = selectedIntersection.nodeId;
         Road r;
         List<Segment> segs;
+        int count = 0;
+        String[] toRoads = new String[20];
+        StringBuilder roadNames = new StringBuilder();
         for (Map.Entry<Integer, Road> entry : roads.entrySet()) {
             r = entry.getValue();
             segs = r.getSegs();
             for (Segment seg : segs) {
                 if (seg.getNode1() == id || seg.getNode2() == id) {
-                    return r.getName();
+                    if (!Arrays.asList(toRoads).contains(r.getName())) {
+                        toRoads[count++] = r.getName();
+                    }
                 }
             }
         }
-        return null;
+        for (String toRoad : toRoads) {
+            if (toRoad != null) {
+                roadNames.append("\n\n").append(toRoad);
+            } else break;
+        }
+        return roadNames;
     }
 
     protected void onSearch() {
@@ -85,26 +100,27 @@ public class MapDraw extends GUI {
     protected void onMove(Move m) {
         switch (m) {
             case NORTH:
-                origin = origin.moveBy(0, moveBy / (zoom / 4));
+                origin = origin.moveBy(0, moveBy);
                 break;
             case EAST:
-                origin = origin.moveBy(moveBy / (zoom / 4), 0);
+                origin = origin.moveBy(moveBy, 0);
                 break;
             case SOUTH:
-                origin = origin.moveBy(0, -moveBy / (zoom / 4));
+                origin = origin.moveBy(0, -moveBy);
                 break;
             case WEST:
-                origin = origin.moveBy(-moveBy / (zoom / 4), 0);
+                origin = origin.moveBy(-moveBy, 0);
                 break;
             case ZOOM_IN:
-                zoom+=1.4;
+                zoom += 2;
                 break;
             case ZOOM_OUT:
-                zoom-=1.4;
+                zoom -= 2;
+                break;
+            default:
                 break;
         }
     }
-
 
     protected void onLoad(File nodes, File roadList, File segments, File polygons) {
         String line;
@@ -149,7 +165,6 @@ public class MapDraw extends GUI {
                 }
                 tempSeg = new Segment(Double.parseDouble(tokens[1]), Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3]), locations);
                 roads.get(Integer.parseInt(tokens[0])).addSegs(tempSeg);
-                this.segments.add(tempSeg);
                 locations.clear();
             }
             f.close();
@@ -164,8 +179,8 @@ public class MapDraw extends GUI {
             System.out.println("Error: " + e);
             e.printStackTrace();
         }
-
     }
+
 
     public static void main(String[] args) {
         new MapDraw();

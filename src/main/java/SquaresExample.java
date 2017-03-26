@@ -37,7 +37,7 @@ public class SquaresExample extends GUI {
 		getTextOutputArea().setText("new squares created.");
 	}
 
-	@Override
+    @Override
 	protected void redraw(Graphics g) {
 		for (Square s : squares)
 			s.draw(g);
@@ -100,10 +100,6 @@ public class SquaresExample extends GUI {
 			return x > this.x && y > this.y && x < this.x + SQUARE_SIZE
 					&& y < this.y + SQUARE_SIZE;
 		}
-	}
-
-	public static void main(String[] args) {
-		new SquaresExample();
 	}
 }
 

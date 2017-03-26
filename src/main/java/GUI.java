@@ -23,9 +23,9 @@ public abstract class GUI {
 	 * appropriate one is passed to your code when the move(Move) method is
 	 * called.
 	 */
-	public enum Move {
-		NORTH, SOUTH, EAST, WEST, ZOOM_IN, ZOOM_OUT
-	}
+    public enum Move {
+        NORTH, SOUTH, EAST, WEST, ZOOM_IN, ZOOM_OUT
+    }
 
 	// these are the methods you need to implement.
 
@@ -76,7 +76,7 @@ public abstract class GUI {
 	/**
 	 * @return the JTextArea at the bottom of the screen for output.
 	 */
-	public JTextArea getTextOutputArea() {
+    JTextArea getTextOutputArea() {
 		return textOutputArea;
 	}
 
@@ -84,14 +84,14 @@ public abstract class GUI {
 	 * @return the JTextField used as a search box in the top-right, which can
 	 *         be queried for the string it contains.
 	 */
-	public JTextField getSearchBox() {
+    JTextField getSearchBox() {
 		return search;
 	}
 
 	/**
 	 * @return the dimensions of the drawing area.
 	 */
-	public Dimension getDrawingAreaDimension() {
+    Dimension getDrawingAreaDimension() {
 		return drawing.getSize();
 	}
 
@@ -100,7 +100,7 @@ public abstract class GUI {
 	 * whenever a button is pressed or the search box is updated, so you
 	 * probably won't need to call this.
 	 */
-	public void redraw() {
+    void redraw() {
 		frame.repaint();
 	}
 
@@ -136,14 +136,14 @@ public abstract class GUI {
 
 	private JFrame frame;
 
-	private JPanel controls;
-	private JComponent drawing; // we customise this to make it a drawing pane.
+    private JComponent drawing; // we customise this to make it a drawing pane.
 	private JTextArea textOutputArea;
 
 	private JTextField search;
 	private JFileChooser fileChooser;
 
-	public GUI() {
+	@SuppressWarnings("WeakerAccess")
+    public GUI() {
 		initialise();
 	}
 
@@ -278,7 +278,7 @@ for (File f : files) {
 		// GridLayout is self-describing. BorderLayout puts a single component
 		// on the north, south, east, and west sides of the outer component, as
 		// well as one in the centre. google for more information.
-		controls = new JPanel();
+        JPanel controls = new JPanel();
 		controls.setLayout(new BoxLayout(controls, BoxLayout.LINE_AXIS));
 
 		// make an empty border so the components aren't right up against the
@@ -381,7 +381,7 @@ for (File f : files) {
 		frame = new JFrame("Mapper");
 		// this makes the program actually quit when the frame's close button is
 		// pressed.
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
 		frame.add(controls, BorderLayout.NORTH);
 		frame.add(split, BorderLayout.CENTER);

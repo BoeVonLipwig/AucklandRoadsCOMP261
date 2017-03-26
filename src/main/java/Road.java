@@ -8,20 +8,24 @@ import java.util.List;
  * 16/03/2017.
  */
 public class Road {
-    public final int roadId;
-    public final int type;
-    public final String name;
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
+    private final int roadId;
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
+    private final int type;
+    private final String name;
     private boolean highlighted=false;
+    @SuppressWarnings("SpellCheckingInspection")
     private List<Segment> segs= new ArrayList<>();
 
     //some of these are not used but may be later so i have put them in regardless
+    @SuppressWarnings("unused")
     Road(int roadId, int type, String label, String city, boolean oneWay, int speed, int roadclass, boolean car, boolean pedestrain, boolean bicyle) {
         this.type = type;
         this.roadId = roadId;
         name = city +"\n"+ label;
     }
 
-    public void draw(Graphics g, Location origin, double zoom ){
+    void draw(Graphics g, Location origin, double zoom){
         segs.forEach(segment -> segment.draw(highlighted, g ,origin, zoom));
     }
 
@@ -29,19 +33,16 @@ public class Road {
         return segs;
     }
 
-    public void addSegs(Segment seg) {
+
+    void addSegs(Segment seg) {
         segs.add(seg);
     }
 
-    public boolean highlight(boolean toggle){
+    boolean highlight(boolean toggle){
         return highlighted=toggle;
     }
 
-    public boolean isHighlighted() {
-        return highlighted;
-    }
-
-    public String getName() {
+    String getName() {
         return name;
     }
 }

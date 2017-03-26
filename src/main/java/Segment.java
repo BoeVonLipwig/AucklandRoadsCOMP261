@@ -10,27 +10,29 @@ import java.util.List;
  */
 class Segment {
 
-    public final double length;
-    public final int node1;
-    public final int node2;
-    public List<Location> coords = new ArrayList<>();
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
+    private final double length;
+    private final int node1;
+    private final int node2;
+    @SuppressWarnings("SpellCheckingInspection")
+    private List<Location> coords = new ArrayList<>();
 
-    Segment(double length, int node1, int node2, List<Location> coords) {
+    Segment(double length, int node1, int node2, @SuppressWarnings("SpellCheckingInspection") List<Location> coords) {
         this.length = length;
         this.node1 = node1;
         this.node2 = node2;
         this.coords.addAll(coords);
     }
 
-    public int getNode1() {
+    int getNode1() {
         return node1;
     }
 
-    public int getNode2() {
+    int getNode2() {
         return node2;
     }
 
-    public void draw(boolean highlighted, Graphics g, Location orign, double zoom) {
+    void draw(boolean highlighted, Graphics g, Location orign, double zoom) {
         g.setColor(highlighted ? Color.GREEN : Color.BLACK);
         for (int i = 0; i < coords.size()-1; i ++) {
             Point p1 = coords.get(i).asPoint(orign, zoom);
