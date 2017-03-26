@@ -106,6 +106,18 @@ public class Location {
         return Math.abs(this.x - other.x) + Math.abs(this.y - other.y) <= dist;
     }
 
+    public Location scale(double zoom) {
+        return new Location(x * zoom, y * zoom);
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
     public String toString() {
         return String.format("(%.3f, %.3f)", x, y);
     }

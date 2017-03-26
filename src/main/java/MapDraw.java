@@ -71,15 +71,15 @@ public class MapDraw extends GUI {
     protected void onSearch() {
         highlighted.forEach(road -> road.highlight(false));
         highlighted.clear();
-        String output="";
-        selectedIntersection=null;
+        StringBuilder output = new StringBuilder();
+        selectedIntersection = null;
         for (String roadName : trie.find(getSearchBox().getText())) {
-            output+=roadName+"\n";
+            output.append(roadName).append("\n");
             Road r = roads.get(roadNames.get(roadName));
             highlighted.add(r);
             r.highlight(true);
         }
-        getTextOutputArea().setText(output);
+        getTextOutputArea().setText(output.toString());
     }
 
     protected void onMove(Move m) {
@@ -97,13 +97,14 @@ public class MapDraw extends GUI {
                 origin = origin.moveBy(-moveBy / (zoom / 4), 0);
                 break;
             case ZOOM_IN:
-                zoom += 1.4;
+                zoom+=1.4;
                 break;
             case ZOOM_OUT:
-                zoom -= 1.4;
+                zoom-=1.4;
                 break;
         }
     }
+
 
     protected void onLoad(File nodes, File roadList, File segments, File polygons) {
         String line;
@@ -125,7 +126,7 @@ public class MapDraw extends GUI {
             while ((line = f.readLine()) != null) {
                 tokens = line.split("\t");
                 trie.add(tokens[2]);
-                roadNames.put(tokens[2],Integer.parseInt(tokens[0]));
+                roadNames.put(tokens[2], Integer.parseInt(tokens[0]));
                 roads.put(Integer.parseInt(tokens[0]), new Road(Integer.parseInt(tokens[0]),
                         Integer.parseInt(tokens[1]),
                         tokens[2],
