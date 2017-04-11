@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Shaun Sinclair
@@ -8,15 +10,34 @@ import java.awt.*;
 class Intersection {
     final Location location;
     final int nodeId;
+    private Set<Segment> segments=new HashSet<>();
 
     Intersection(Location location, int nodeId){
         this.location=location;
         this.nodeId=nodeId;
     }
 
-    void draw(boolean highlighted, Graphics g, Location origin, double zoom) {
-        g.setColor(highlighted ? Color.RED : Color.GREEN);
+    void draw(int highlighted, Graphics g, Location origin, double zoom) {
+		switch (highlighted) {
+			case 1:
+				g.setColor(Color.RED);
+				break;
+			case 2:
+				g.setColor(Color.GREEN);
+				break;
+			case 3:
+				g.setColor(Color.BLUE);
+				break;
+		}
         Point p=location.asPoint(origin,zoom);
         g.drawRect(p.x,p.y,2,2);
     }
+
+	public Set<Segment> getSegments() {
+		return segments;
+	}
+
+	public void addSegments(Segment segments) {
+		this.segments.add(segments);
+	}
 }

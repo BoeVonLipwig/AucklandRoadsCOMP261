@@ -71,6 +71,8 @@ public abstract class GUI {
 	protected abstract void onLoad(File nodes, File roads, File segments,
 			File polygons);
 
+
+	protected abstract void findPath();
 	// here are some useful methods you'll need.
 
 	/**
@@ -243,6 +245,12 @@ for (File f : files) {
             redraw();
         });
 
+		JButton findPath = new JButton("Find path");
+		findPath.addActionListener(ev -> {
+			findPath();
+			redraw();
+		});
+
 		// next, make the search box at the top-right. we manually fix
 		// it's size, and add an action listener to call your code when
 		// the user presses enter.
@@ -286,14 +294,15 @@ for (File f : files) {
 		Border edge = BorderFactory.createEmptyBorder(5, 5, 5, 5);
 		controls.setBorder(edge);
 
-		JPanel loadquit = new JPanel();
-		loadquit.setLayout(new GridLayout(2, 1));
+		JPanel system = new JPanel();
+		system.setLayout(new GridLayout(2, 1));
 		// manually set a fixed size for the panel containing the load and quit
 		// buttons (doesn't change with window resize).
-		loadquit.setMaximumSize(new Dimension(50, 100));
-		loadquit.add(load);
-		loadquit.add(quit);
-		controls.add(loadquit);
+		system.setMaximumSize(new Dimension(50, 100));
+		system.add(load);
+		system.add(quit);
+		system.add(findPath);
+		controls.add(system);
 		// rigid areas are invisible components that can be used to space
 		// components out.
 		controls.add(Box.createRigidArea(new Dimension(15, 0)));
