@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
  * 11/04/2017.
  */
 
-class AStarNode {
+class AStarNode implements Comparable<AStarNode>{
 	private Intersection i;
 	private double actualCost;
 	private double heuristicCost;
@@ -67,5 +67,15 @@ class AStarNode {
 
 	void setParent(AStarNode parent) {
 		this.parent = parent;
+	}
+
+	@Override
+	public int compareTo(AStarNode o) {
+		if (actualCost>o.actualCost){
+			return 1;
+		}else if(actualCost>o.actualCost){
+			return -1;
+		}
+		return 0;
 	}
 }

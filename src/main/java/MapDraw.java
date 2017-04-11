@@ -26,6 +26,7 @@ public class MapDraw extends GUI {
 	private Location origin = new Location(-7, 0);
 	private int zoom = 50;
 	private static final double moveBy = 1.4;
+	private List<Intersection> path=null;
 
 	@SuppressWarnings("WeakerAccess")
 	public MapDraw() {
@@ -36,20 +37,29 @@ public class MapDraw extends GUI {
 		g.translate(
 				getDrawingAreaDimension().width / 2,
 				getDrawingAreaDimension().height / 2);
-		roads.values().forEach(r -> r.draw(1,g, origin, zoom));
-		intersections.forEach(i -> i.draw(2, g, origin, zoom));
+		roads.values().forEach(r -> r.draw(1, g, origin, zoom));
+		intersections.forEach(i -> i.draw(g, origin, zoom));
 		if (selectedIntersection != null) {
 			StringBuilder output = printIntersectionInfo();
 			getTextOutputArea().setText(output.toString());
-			selectedIntersection.draw(1, g, origin, zoom);
+			selectedIntersection.setHighlighted(1);
+			selectedIntersection.draw( g, origin, zoom);
 			if (preSelectedIntersection != null) {
-				preSelectedIntersection.draw(3, g, origin, zoom);
+				preSelectedIntersection.setHighlighted(3);
+				preSelectedIntersection.draw( g, origin, zoom);
+				preSelectedIntersection.setHighlighted(2);
 			}
 			preSelectedIntersection = selectedIntersection;
+		}
+		if(path!=null){
+			drawPath(g);
 		}
 	}
 
 	protected void onClick(MouseEvent e) {
+		if (selectedIntersection != null) {
+			preSelectedIntersection = selectedIntersection;
+		}
 		Point temp = new Point(e.getX() - (getDrawingAreaDimension().width / 2), e.getY() - (getDrawingAreaDimension().height / 2));
 		Location mouseLocation = Location.newFromPoint(temp, origin, zoom);
 		double lowestDistance = intersections.get(0).location.distance(mouseLocation);
@@ -190,7 +200,27 @@ public class MapDraw extends GUI {
 
 	@Override
 	protected void findPath() {
+		System.out.println("foot");
+		MapHandler MH = new MapHandler();
+		if (selectedIntersection != null || preSelectedIntersection != null) {
+			path = MH.path(selectedIntersection, preSelectedIntersection);
+			for (int i = 0; i < path.size()-1; i++) {
+				path.get(i).setHighlighted(3);
+			}
+		}
+	}
 
+	private void drawPath(Graphics g){
+		System.out.println("other foot");
+		for (int i = 0; i < path.size()-1; i++) {
+			path.get(i).draw(g,origin,zoom);
+			for (Segment cur : path.get(i).getSegments()) {
+				if (cur.findOtherEnd(path.get(i)).equals(path.get(i + 1))) {
+					cur.draw(3, g, origin, zoom);
+					System.out.println("asdasdasd");
+				}
+			}
+		}
 	}
 
 	public static void main(String[] args) {

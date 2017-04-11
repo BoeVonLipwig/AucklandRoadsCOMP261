@@ -41,23 +41,25 @@ class Segment {
 		return length;
 	}
 
-	Intersection findOtherEnd(Intersection i){
-		if(i.equals(node1))return node2;
-		return node1;
+	Intersection findOtherEnd(Intersection i) {
+		if (i.equals(this.node1)) {
+			return this.node2;
+		}
+		return this.node1;
 	}
 
 
 	void draw(int highlighted, Graphics g, Location origin, double zoom) {
 		switch (highlighted) {
-		case 1:
-			g.setColor(Color.BLACK);
-			break;
-		case 2:
-			g.setColor(Color.RED);
-			break;
-		case 3:
-			g.setColor(Color.BLUE);
-			break;
+			case 1:
+				g.setColor(Color.BLACK);
+				break;
+			case 2:
+				g.setColor(Color.RED);
+				break;
+			case 3:
+				g.setColor(Color.BLUE);
+				break;
 		}
 		for (int i = 0; i < coords.size() - 1; i++) {
 			Point p1 = coords.get(i).asPoint(origin, zoom);

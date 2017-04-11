@@ -6,10 +6,10 @@ import java.util.*;
  * 11/04/2017.
  */
 public class MapHandler {
-	public MapHandler(){
+	MapHandler(){
 	}
 
-	public List<Intersection> path (Intersection start, Intersection end){
+	List<Intersection> path(Intersection start, Intersection end){
 		Queue<AStarNode> workingPath= new PriorityQueue<>();
 		Set<AStarNode> visited = new HashSet<>();
 		AStarNode Start=new AStarNode(null,0,calcHur(start,end),start);
@@ -17,7 +17,7 @@ public class MapHandler {
 		while (!workingPath.isEmpty()){
 			AStarNode cur = workingPath.poll();
 			if (cur.getI().equals(end)){
-				retrace(cur);
+				return retrace(cur);
 			}
 			for (AStarNode node : cur.getNeighbours()){
 				if(visited.contains(node))continue;
@@ -58,8 +58,5 @@ public class MapHandler {
 	private double calcHur(Intersection a, Intersection b){
 		return a.location.distance(b.location);
 	}
-
-
-
 
 }

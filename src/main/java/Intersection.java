@@ -10,6 +10,7 @@ import java.util.Set;
 class Intersection {
     final Location location;
     final int nodeId;
+    private int highlighted=2;
     private Set<Segment> segments=new HashSet<>();
 
     Intersection(Location location, int nodeId){
@@ -17,7 +18,7 @@ class Intersection {
         this.nodeId=nodeId;
     }
 
-    void draw(int highlighted, Graphics g, Location origin, double zoom) {
+    void draw(Graphics g, Location origin, double zoom) {
 		switch (highlighted) {
 			case 1:
 				g.setColor(Color.RED);
@@ -32,6 +33,10 @@ class Intersection {
         Point p=location.asPoint(origin,zoom);
         g.drawRect(p.x,p.y,2,2);
     }
+
+	public void setHighlighted(int highlighted) {
+		this.highlighted = highlighted;
+	}
 
 	public Set<Segment> getSegments() {
 		return segments;
