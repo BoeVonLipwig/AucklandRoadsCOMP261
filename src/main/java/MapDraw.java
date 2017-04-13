@@ -27,6 +27,8 @@ public class MapDraw extends GUI {
 	private int zoom = 50;
 	private static final double moveBy = 1.4;
 	private List<Intersection> path=null;
+	private MapHandler MH = new MapHandler();
+
 
 	@SuppressWarnings("WeakerAccess")
 	public MapDraw() {
@@ -49,10 +51,19 @@ public class MapDraw extends GUI {
 				preSelectedIntersection.draw( g, origin, zoom);
 				preSelectedIntersection.setHighlighted(2);
 			}
-			preSelectedIntersection = selectedIntersection;
 		}
 		if(path!=null){
-			drawPath(g);
+			for (int i = 0; i < path.size()-1; i++) {
+			path.get(i).draw(g,origin,zoom);
+				StringBuilder output=new StringBuilder();
+			for (Segment cur : path.get(i).getSegments()) {
+				if (cur.findOtherEnd(path.get(i)).equals(path.get(i + 1))) {
+					cur.draw(3, g, origin, zoom);
+					output.append(roads.get(cur.getRoad().getRoadId()).getName());
+				}
+			}
+			getTextOutputArea().setText(output.toString());
+		}
 		}
 	}
 
@@ -180,7 +191,7 @@ public class MapDraw extends GUI {
 				for (int i = 4; i < tokens.length - 1; i += 2) {
 					locations.add(Location.newFromLatLon(Double.parseDouble(tokens[i]), Double.parseDouble(tokens[i + 1])));
 				}
-				tempSeg = new Segment(Double.parseDouble(tokens[1]), interMap.get(Integer.parseInt(tokens[2])), interMap.get(Integer.parseInt(tokens[3])), locations);
+				tempSeg = new Segment(roads.get(Integer.parseInt(tokens[0])),Double.parseDouble(tokens[1]), interMap.get(Integer.parseInt(tokens[2])), interMap.get(Integer.parseInt(tokens[3])), locations);
 				roads.get(Integer.parseInt(tokens[0])).addSegs(tempSeg);
 				locations.clear();
 			}
@@ -201,27 +212,17 @@ public class MapDraw extends GUI {
 	@Override
 	protected void findPath() {
 		System.out.println("foot");
-		MapHandler MH = new MapHandler();
 		if (selectedIntersection != null || preSelectedIntersection != null) {
-			path = MH.path(selectedIntersection, preSelectedIntersection);
+			assert selectedIntersection != null;
+			System.out.println(selectedIntersection.equals(preSelectedIntersection));
+			path = MH.path(preSelectedIntersection, selectedIntersection);
+			System.out.println(path.size());
 			for (int i = 0; i < path.size()-1; i++) {
 				path.get(i).setHighlighted(3);
 			}
 		}
 	}
 
-	private void drawPath(Graphics g){
-		System.out.println("other foot");
-		for (int i = 0; i < path.size()-1; i++) {
-			path.get(i).draw(g,origin,zoom);
-			for (Segment cur : path.get(i).getSegments()) {
-				if (cur.findOtherEnd(path.get(i)).equals(path.get(i + 1))) {
-					cur.draw(3, g, origin, zoom);
-					System.out.println("asdasdasd");
-				}
-			}
-		}
-	}
 
 	public static void main(String[] args) {
 		new MapDraw();

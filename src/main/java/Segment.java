@@ -12,14 +12,15 @@ class Segment {
 
 	@SuppressWarnings({"FieldCanBeLocal", "unused"})
 	private final double length;
-
+	private Road road;
 	private final Intersection node1;
 	private final Intersection node2;
 	@SuppressWarnings("SpellCheckingInspection")
 	private List<Location> coords;
 
 	@SuppressWarnings("SpellCheckingInspection")
-	Segment(double length, Intersection node1, Intersection node2, List<Location> coords) {
+	Segment(Road road, double length, Intersection node1, Intersection node2, List<Location> coords) {
+		this.road=road;
 		this.length = length;
 		this.node1 = node1;
 		this.node2 = node2;
@@ -67,6 +68,10 @@ class Segment {
 			g.drawLine(p1.x, p1.y, p2.x, p2.y);
 		}
 
+	}
+
+	public Road getRoad() {
+		return road;
 	}
 }
 

@@ -1,5 +1,5 @@
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -12,15 +12,15 @@ class AStarNode implements Comparable<AStarNode>{
 	private Intersection i;
 	private double actualCost;
 	private double heuristicCost;
-	double costFromStart;
+	private double costFromStart;
 	private AStarNode parent;
 
-	AStarNode(AStarNode parent, double actualCost, double heuristicCost, Intersection i) {
+	AStarNode(AStarNode parent, double costFromStart, double heuristicCost, Intersection i) {
 		this.parent = parent;
-		this.actualCost = actualCost;
+		this.costFromStart = costFromStart;
 		this.heuristicCost = heuristicCost;
 		this.i = i;
-		costFromStart = actualCost + heuristicCost;
+		actualCost = this.costFromStart + this.heuristicCost;
 	}
 
 	List<AStarNode> getNeighbours() {
@@ -30,10 +30,8 @@ class AStarNode implements Comparable<AStarNode>{
 				.collect(Collectors.toList());
 	}
 
-	List<Segment> getSegments(){
-		ArrayList<Segment> cur= new ArrayList<>();
-		cur.addAll(i.getSegments());
-		return cur;
+	Set<Segment> getSegments(){
+		return i.getSegments();
 	}
 
 	//getters and setters
@@ -45,16 +43,16 @@ class AStarNode implements Comparable<AStarNode>{
 		return actualCost;
 	}
 
+	void setActualCost(double actualCost) {
+		this.actualCost = actualCost;
+	}
+
 	double getHeuristicCost() {
 		return heuristicCost;
 	}
 
 	void setHeuristicCost(double heuristicCost) {
 		this.heuristicCost = heuristicCost;
-	}
-
-	double getCostFromStart() {
-		return costFromStart;
 	}
 
 	void setCostFromStart(double costFromStart) {
@@ -70,10 +68,35 @@ class AStarNode implements Comparable<AStarNode>{
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((i == null) ? 0 : i.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AStarNode other = (AStarNode) obj;
+		if (i == null) {
+			if (other.i != null)
+				return false;
+		} else if (!i.equals(other.i))
+			return false;
+		return true;
+	}
+
+	@Override
 	public int compareTo(AStarNode o) {
-		if (actualCost>o.actualCost){
+		if (this.actualCost>o.actualCost){
 			return 1;
-		}else if(actualCost>o.actualCost){
+		}else if(this.actualCost>o.actualCost){
 			return -1;
 		}
 		return 0;

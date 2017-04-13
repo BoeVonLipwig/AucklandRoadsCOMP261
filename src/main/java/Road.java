@@ -47,4 +47,8 @@ public class Road {
 	String getName() {
 		return name;
 	}
+
+	public int getRoadId() {
+		return roadId;
+	}
 }
