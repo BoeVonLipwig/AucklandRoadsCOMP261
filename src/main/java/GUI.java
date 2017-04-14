@@ -161,10 +161,6 @@ public abstract class GUI {
 		// anonymous class, covered in SWEN221. these are useful when working
 		// with swing. the quit button isn't really necessary, as you can just
 		// press the frame's close button, but it serves as a nice example.
-		JButton quit = new JButton("Quit");
-		quit.addActionListener(ev -> {
-            System.exit(0); // cleanly end the program.
-        });
 
 		fileChooser = new JFileChooser();
 		JButton load = new JButton("Load");
@@ -300,7 +296,6 @@ for (File f : files) {
 		// buttons (doesn't change with window resize).
 		system.setMaximumSize(new Dimension(50, 100));
 		system.add(load);
-		system.add(quit);
 		system.add(findPath);
 		controls.add(system);
 		// rigid areas are invisible components that can be used to space

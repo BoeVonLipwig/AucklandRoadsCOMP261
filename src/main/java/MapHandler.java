@@ -6,7 +6,10 @@ import java.util.*;
  * 11/04/2017.
  */
 public class MapHandler {
-	MapHandler() {
+	private List<Intersection> intersections;
+
+	MapHandler(List<Intersection> intersections) {
+		this.intersections=intersections;
 	}
 
 	List<Intersection> path(Intersection start, Intersection end) {
@@ -56,6 +59,10 @@ public class MapHandler {
 			goal = goal.getParent();
 		}
 		return path;
+	}
+
+	public void findArtPoints(){
+
 	}
 
 	private double calcHur(Intersection a, Intersection b) {

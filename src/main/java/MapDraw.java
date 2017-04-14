@@ -27,7 +27,7 @@ public class MapDraw extends GUI {
 	private int zoom = 50;
 	private static final double moveBy = 1.4;
 	private List<Intersection> path=null;
-	private MapHandler MH = new MapHandler();
+	private MapHandler MH = new MapHandler(intersections);
 
 
 	@SuppressWarnings("WeakerAccess")
