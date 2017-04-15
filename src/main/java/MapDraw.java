@@ -26,8 +26,10 @@ public class MapDraw extends GUI {
 	private Location origin = new Location(-7, 0);
 	private int zoom = 50;
 	private static final double moveBy = 1.4;
-	private List<Intersection> path=null;
+	private List<Intersection> path = null;
 	private MapHandler MH = new MapHandler(intersections);
+	private List<Intersection> artPoints;
+	private boolean showArt = false;
 
 
 	@SuppressWarnings("WeakerAccess")
@@ -45,27 +47,41 @@ public class MapDraw extends GUI {
 			StringBuilder output = printIntersectionInfo();
 			getTextOutputArea().setText(output.toString());
 			selectedIntersection.setHighlighted(1);
-			selectedIntersection.draw( g, origin, zoom);
+			selectedIntersection.draw(g, origin, zoom);
 			if (preSelectedIntersection != null) {
 				preSelectedIntersection.setHighlighted(3);
-				preSelectedIntersection.draw( g, origin, zoom);
+				preSelectedIntersection.draw(g, origin, zoom);
 				preSelectedIntersection.setHighlighted(2);
 			}
 		}
-		if(path!=null){
-			for (int i = 0; i < path.size()-1; i++) {
-			path.get(i).draw(g,origin,zoom);
-				StringBuilder output=new StringBuilder();
-			for (Segment cur : path.get(i).getSegments()) {
-				if (cur.findOtherEnd(path.get(i)).equals(path.get(i + 1))) {
-					cur.draw(3, g, origin, zoom);
-					output.append(roads.get(cur.getRoad().getRoadId()).getName());
+		if (path != null) {
+			for (int i = 0; i < path.size() - 1; i++) {
+				path.get(i).draw(g, origin, zoom);
+				StringBuilder output = new StringBuilder();
+				for (Segment cur : path.get(i).getSegments()) {
+					if (cur.findOtherEnd(path.get(i)).equals(path.get(i + 1))) {
+						cur.draw(3, g, origin, zoom);
+						output.append(roads.get(cur.getRoad().getRoadId()).getName());
+					}
 				}
+				getTextOutputArea().setText(output.toString());
 			}
-			getTextOutputArea().setText(output.toString());
 		}
+		if (showArt){
+			for (Intersection artPoint : artPoints) {
+				artPoint.setHighlighted(4);
+				artPoint.draw(g, origin, zoom);
+			}
+			System.out.println("farther");
 		}
 	}
+
+	public void toggleArt(){
+		showArt=!showArt;
+		getTextOutputArea().setText("There are "+ artPoints.size()+ " articulation points.");
+		System.out.println("and apparently ");
+	}
+
 
 	protected void onClick(MouseEvent e) {
 		if (selectedIntersection != null) {
@@ -191,7 +207,7 @@ public class MapDraw extends GUI {
 				for (int i = 4; i < tokens.length - 1; i += 2) {
 					locations.add(Location.newFromLatLon(Double.parseDouble(tokens[i]), Double.parseDouble(tokens[i + 1])));
 				}
-				tempSeg = new Segment(roads.get(Integer.parseInt(tokens[0])),Double.parseDouble(tokens[1]), interMap.get(Integer.parseInt(tokens[2])), interMap.get(Integer.parseInt(tokens[3])), locations);
+				tempSeg = new Segment(roads.get(Integer.parseInt(tokens[0])), Double.parseDouble(tokens[1]), interMap.get(Integer.parseInt(tokens[2])), interMap.get(Integer.parseInt(tokens[3])), locations);
 				roads.get(Integer.parseInt(tokens[0])).addSegs(tempSeg);
 				locations.clear();
 			}
@@ -207,17 +223,15 @@ public class MapDraw extends GUI {
 			System.out.println("Error: " + e);
 			e.printStackTrace();
 		}
+		artPoints = MH.findArtPoints();
 	}
 
 	@Override
 	protected void findPath() {
-		System.out.println("foot");
 		if (selectedIntersection != null || preSelectedIntersection != null) {
 			assert selectedIntersection != null;
-			System.out.println(selectedIntersection.equals(preSelectedIntersection));
 			path = MH.path(preSelectedIntersection, selectedIntersection);
-			System.out.println(path.size());
-			for (int i = 0; i < path.size()-1; i++) {
+			for (int i = 0; i < path.size() - 1; i++) {
 				path.get(i).setHighlighted(3);
 			}
 		}

@@ -1,24 +1,36 @@
 import java.awt.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Shaun Sinclair
  * COMP261
  * 16/03/2017.
  */
-class Intersection {
-    final Location location;
-    final int nodeId;
-    private int highlighted=2;
-    private Set<Segment> segments=new HashSet<>();
+public class Intersection {
+	final Location location;
+	final int nodeId;
+	private int highlighted = 2;
+	private Set<Segment> segments = new HashSet<>();
+	//These fields are specific to the articulation points
+	int count = Integer.MAX_VALUE;
+	int reachBack=0;
+	Queue<Intersection> children;
 
-    Intersection(Location location, int nodeId){
-        this.location=location;
-        this.nodeId=nodeId;
-    }
+	Intersection(Location location, int nodeId) {
+		this.location = location;
+		this.nodeId = nodeId;
+	}
 
-    void draw(Graphics g, Location origin, double zoom) {
+	List<Intersection> getNeighbours() {
+		return segments.stream()
+				.map(seg -> seg.findOtherEnd(this))
+				.distinct()
+				.collect(Collectors.toList());
+	}
+
+	void draw(Graphics g, Location origin, double zoom) {
 		switch (highlighted) {
 			case 1:
 				g.setColor(Color.RED);
@@ -29,16 +41,19 @@ class Intersection {
 			case 3:
 				g.setColor(Color.BLUE);
 				break;
+			case 4:
+				g.setColor(Color.ORANGE);
+				break;
 		}
-        Point p=location.asPoint(origin,zoom);
-        g.drawRect(p.x,p.y,2,2);
-    }
+		Point p = location.asPoint(origin, zoom);
+		g.drawRect(p.x, p.y, 2, 2);
+	}
 
-	public void setHighlighted(int highlighted) {
+	void setHighlighted(int highlighted) {
 		this.highlighted = highlighted;
 	}
 
-	public Set<Segment> getSegments() {
+	Set<Segment> getSegments() {
 		return segments;
 	}
 

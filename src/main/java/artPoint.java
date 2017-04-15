@@ -4,21 +4,21 @@
  * 13/04/2017.
  */
 public class artPoint {
-	private AStarNode cur;
+	private Intersection cur;
 	int count;
-	private AStarNode root;
+	private Intersection root;
 
-	public artPoint(AStarNode cur, int count, AStarNode root) {
+	public artPoint(Intersection cur, int count, Intersection root) {
 		this.cur = cur;
 		this.count = count;
 		this.root = root;
 	}
 
-	public AStarNode getCur() {
+	public Intersection getCur() {
 		return cur;
 	}
 
-	public AStarNode getRoot() {
+	public Intersection getRoot() {
 		return root;
 	}
 }

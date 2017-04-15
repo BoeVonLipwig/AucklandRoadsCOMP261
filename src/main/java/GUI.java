@@ -73,6 +73,7 @@ public abstract class GUI {
 
 
 	protected abstract void findPath();
+	protected abstract void toggleArt();
 	// here are some useful methods you'll need.
 
 	/**
@@ -246,6 +247,13 @@ for (File f : files) {
 			findPath();
 			redraw();
 		});
+//TODO
+		JButton showArt = new JButton("Show points of articulation");
+		showArt.addActionListener(ev -> {
+			System.out.println("this far");
+			toggleArt();
+			redraw();
+		});
 
 		// next, make the search box at the top-right. we manually fix
 		// it's size, and add an action listener to call your code when
@@ -297,6 +305,7 @@ for (File f : files) {
 		system.setMaximumSize(new Dimension(50, 100));
 		system.add(load);
 		system.add(findPath);
+		system.add(showArt);
 		controls.add(system);
 		// rigid areas are invisible components that can be used to space
 		// components out.
