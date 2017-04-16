@@ -5,6 +5,8 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.List;
 
@@ -30,14 +32,16 @@ public class MapDraw extends GUI {
 	private MapHandler MH = new MapHandler(intersections);
 	private List<Intersection> artPoints;
 	private boolean showArt = false;
+	private double totalLength = 0, totalTime = 0;
 
-
-	@SuppressWarnings("WeakerAccess")
-	public MapDraw() {
+	//may need to be public for testing
+	private MapDraw() {
 		redraw();
 	}
 
 	protected void redraw(Graphics g) {
+		totalTime=0;
+		totalLength=0;
 		g.translate(
 				getDrawingAreaDimension().width / 2,
 				getDrawingAreaDimension().height / 2);
@@ -57,29 +61,79 @@ public class MapDraw extends GUI {
 		if (path != null) {
 			for (int i = 0; i < path.size() - 1; i++) {
 				path.get(i).draw(g, origin, zoom);
-				StringBuilder output = new StringBuilder();
 				for (Segment cur : path.get(i).getSegments()) {
 					if (cur.findOtherEnd(path.get(i)).equals(path.get(i + 1))) {
 						cur.draw(3, g, origin, zoom);
-						output.append(roads.get(cur.getRoad().getRoadId()).getName());
 					}
+					totalLength += cur.getLength();
+					totalTime += calcTime(cur);
 				}
-				getTextOutputArea().setText(output.toString());
+				path.get(i).setHighlighted(0);
 			}
+			printRoute();
 		}
-		if (showArt){
+		if (showArt) {
 			for (Intersection artPoint : artPoints) {
 				artPoint.setHighlighted(4);
 				artPoint.draw(g, origin, zoom);
 			}
-			System.out.println("further");
+		}else{
+			for (Intersection artPoint : artPoints) {
+				artPoint.setHighlighted(1);
+				artPoint.draw(g, origin, zoom);
+			}
 		}
 	}
 
-	public void toggleArt(){
-		showArt=!showArt;
-		getTextOutputArea().setText("There are "+ artPoints.size()+ " articulation points.");
-		System.out.println("and apparently ");
+	private void printRoute(){
+		String unit="Hours: ";
+		int dp=2;
+		if(totalTime<1){
+			totalTime*=60;
+			unit="Minutes: ";
+			dp=1;
+		}
+		getTextOutputArea().setText("");
+		Map<String, Double> timeOnRoad=new HashMap<>();
+		for (int i = 0; i < path.size()-1; i++) {
+			List<Segment> segs=new ArrayList<>(path.get(i).getSegments());
+			for (Segment seg : segs) {
+				if (seg.findOtherEnd(path.get(i)).equals(path.get(i + 1))) {
+					String roadName = seg.getRoad().getName();
+					if (timeOnRoad.containsKey(roadName)) {
+						timeOnRoad.put(roadName, timeOnRoad.get(roadName) + seg.getLength());
+					} else {
+						timeOnRoad.put(roadName, seg.getLength());
+					}
+				}
+			}
+		}
+		for (Map.Entry<String, Double> entry : timeOnRoad.entrySet()) {
+			getTextOutputArea().append(entry.getKey() + ": " + round(entry.getValue(), 3) + "km \n");
+		}
+		getTextOutputArea().append("\n Total time traveling: "+round(totalLength,dp)+" "+unit);
+	}
+
+	// helper function taken from stackoverflow: http://stackoverflow.com/questions/2808535/round-a-double-to-2-decimal-places
+	public static double round(double value, int places) {
+		if (places < 0) throw new IllegalArgumentException();
+
+		BigDecimal bd = new BigDecimal(value);
+		bd = bd.setScale(places, RoundingMode.HALF_UP);
+		return bd.doubleValue();
+	}
+
+	private double calcTime(Segment cur) {
+		double roadSpeed = cur.getRoad().speed;
+		if(roadSpeed==0){
+			roadSpeed=5;
+		}else roadSpeed*=20;
+		return cur.getLength()/roadSpeed;
+	}
+
+	public void toggleArt() {
+		showArt = !showArt;
+		getTextOutputArea().setText("There are " + artPoints.size() + " articulation points.");
 	}
 
 

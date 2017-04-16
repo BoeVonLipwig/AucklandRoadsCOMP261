@@ -30,11 +30,14 @@ public class MapHandler {
 				Segment pair = null;
 				Set<Segment> curSegs = cur.getSegments();
 				for (Segment curSeg : curSegs) {
-					if (nID == curSeg.getNode1ID() || nID == curSeg.getNode2ID()) {
+					if (curSeg.getRoad().oneWay&&nID== curSeg.getNode2ID()) {
+						pair = curSeg;
+					}else if (nID == curSeg.getNode1ID() || nID == curSeg.getNode2ID()) {
 						pair = curSeg;
 						break;
 					}
 				}
+				if(pair==null)continue;
 				@SuppressWarnings("ConstantConditions")
 				double totalCost = cur.getActualCost() + pair.getLength();
 				if (!workingPath.contains(node)) {
@@ -108,7 +111,6 @@ public class MapHandler {
 						current.getRoot().reachBack=(Integer.min(current.getRoot().reachBack,current.getCur().reachBack));
 					}
 				}
-				System.out.println("poping");
 				working.pop();
 			}
 		}

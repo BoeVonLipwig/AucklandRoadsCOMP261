@@ -250,7 +250,6 @@ for (File f : files) {
 
 		JButton showArt = new JButton("Show points of articulation");
 		showArt.addActionListener(ev -> {
-			System.out.println("this far");
 			toggleArt();
 			redraw();
 		});

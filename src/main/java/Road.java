@@ -11,14 +11,20 @@ public class Road {
 	private final int roadId;
 	private final int type;
 	int highlighted = 1;
+	int speed;
+	int roadType;
 	private final String name;
 	private List<Segment> segs = new ArrayList<>();
+	boolean oneWay;
 
 	//some of these are not used but may be later so i have put them in regardless
 	@SuppressWarnings("unused")
 	Road(int roadId, int type, String label, String city, boolean oneWay, int speed, int roadClass, boolean car, boolean pedestrian, boolean bicycle) {
 		this.type = type;
 		this.roadId = roadId;
+		this.speed=speed;
+		this.roadType=roadClass;
+		this.oneWay=oneWay;
 		name = city + "\n" + label;
 	}
 
