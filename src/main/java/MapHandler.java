@@ -84,29 +84,28 @@ public class MapHandler {
 		Stack<artPoint> working = new Stack<>();
 		working.push(new artPoint(first, 1, root));
 		while (!working.isEmpty()) {
-			artPoint cur = working.peek();
-			if (cur.getCur().count == Integer.MAX_VALUE) {
-				System.out.println("i get called");
-				cur.count = 1;
-				cur.reachBack = 1;
-				cur.getCur().children = new ArrayDeque<>();
-				for (Intersection i : cur.getCur().getNeighbours()) {
-					if (!(i.equals(cur.getRoot()))){
-						cur.getCur().children.add(i);
+			artPoint current = working.peek();
+			if (current.getCur().count == Integer.MAX_VALUE) {
+				current.getCur().count = current.count;
+				current.getCur().reachBack = current.count;
+				current.getCur().children = new ArrayDeque<>();
+				for (Intersection i : current.getCur().getNeighbours()) {
+					if (!(i.equals(current.getRoot()))){
+						current.getCur().children.add(i);
 					}
 				}
-			}else if(!cur.getCur().children.isEmpty()){
-				Intersection child=cur.getCur().children.poll();
+			}else if(!current.getCur().children.isEmpty()){
+				Intersection child=current.getCur().children.poll();
 				if (child.count<Integer.MAX_VALUE){
-					cur.getCur().reachBack=(Integer.min(cur.getCur().reachBack, child.count));
+					current.getCur().reachBack=(Integer.min(current.getCur().reachBack, child.count));
 				}else {
-					working.push(new artPoint(child, cur.getCur().count+1, cur.getCur()));
+					working.push(new artPoint(child, current.getCur().count+1, current.getCur()));
 				}
 			}else {
-				if(!(cur.getCur().equals(first))){
-					if(cur.getCur().reachBack>=cur.getRoot().count){
-						articulationPoints.add(cur.getRoot());
-						cur.getRoot().reachBack=(Integer.min(cur.getRoot().reachBack,cur.getCur().reachBack));
+				if(!(current.getCur().equals(first))){
+					if(current.getCur().reachBack>=current.getRoot().count){
+						articulationPoints.add(current.getRoot());
+						current.getRoot().reachBack=(Integer.min(current.getRoot().reachBack,current.getCur().reachBack));
 					}
 				}
 				System.out.println("poping");

@@ -6,7 +6,6 @@
 public class artPoint {
 	private Intersection cur;
 	int count;
-	int reachBack=0;
 	private Intersection root;
 
 	public artPoint(Intersection cur, int count, Intersection root) {
