@@ -72,7 +72,7 @@ public class MapDraw extends GUI {
 				artPoint.setHighlighted(4);
 				artPoint.draw(g, origin, zoom);
 			}
-			System.out.println("farther");
+			System.out.println("further");
 		}
 	}
 

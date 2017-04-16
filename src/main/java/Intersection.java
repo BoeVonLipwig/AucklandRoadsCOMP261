@@ -77,7 +77,4 @@ public class Intersection {
 		return nodeId == other.nodeId;
 	}
 
-	public void addSegments(Segment segments) {
-		this.segments.add(segments);
-	}
 }

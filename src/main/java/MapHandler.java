@@ -63,11 +63,14 @@ public class MapHandler {
 
 	public List<Intersection> findArtPoints() {
 		Intersection start = intersections.get(0);
+		for (Intersection intersection : intersections) {
+			intersection.count = Integer.MAX_VALUE;
+		}
 		start.count = 0;
 		int numSubtrees = 0;
 		for (int i = 0; i < start.getNeighbours().size(); i++) {
 			if (start.getNeighbours().get(i).count == Integer.MAX_VALUE) {
-				iterArtPts(start.getNeighbours().get(i), 1, start);
+				iterArtPts(start.getNeighbours().get(i), start);
 				numSubtrees++;
 			}
 		}
@@ -77,38 +80,39 @@ public class MapHandler {
 		return articulationPoints;
 	}
 
-	private Stack<artPoint> iterArtPts(Intersection first, int count, Intersection root) {
+	private void iterArtPts(Intersection first, Intersection root) {
 		Stack<artPoint> working = new Stack<>();
-		working.push(new artPoint(first, count, root));
-		while (!working.empty()) {
+		working.push(new artPoint(first, 1, root));
+		while (!working.isEmpty()) {
 			artPoint cur = working.peek();
 			if (cur.getCur().count == Integer.MAX_VALUE) {
-				cur.getCur().count = count;
-				cur.getCur().reachBack = count;
+				System.out.println("i get called");
+				cur.count = 1;
+				cur.reachBack = 1;
 				cur.getCur().children = new ArrayDeque<>();
 				for (Intersection i : cur.getCur().getNeighbours()) {
-					if (i!=cur.getRoot()){
+					if (!(i.equals(cur.getRoot()))){
 						cur.getCur().children.add(i);
 					}
 				}
-			}else if(!first.children.isEmpty()){
+			}else if(!cur.getCur().children.isEmpty()){
 				Intersection child=cur.getCur().children.poll();
-				if (cur.count<Integer.MAX_VALUE){
+				if (child.count<Integer.MAX_VALUE){
 					cur.getCur().reachBack=(Integer.min(cur.getCur().reachBack, child.count));
 				}else {
-					working.push(new artPoint(cur.getCur(), count+1, root ));
+					working.push(new artPoint(child, cur.getCur().count+1, cur.getCur()));
 				}
 			}else {
-				if(cur.getCur()!=first){
-					if(cur.getRoot().reachBack>=cur.getRoot().count){
+				if(!(cur.getCur().equals(first))){
+					if(cur.getCur().reachBack>=cur.getRoot().count){
 						articulationPoints.add(cur.getRoot());
+						cur.getRoot().reachBack=(Integer.min(cur.getRoot().reachBack,cur.getCur().reachBack));
 					}
-					cur.getRoot().reachBack=(Integer.min(cur.getRoot().reachBack,cur.getCur().count));
 				}
+				System.out.println("poping");
 				working.pop();
 			}
 		}
-		return working;
 	}
 
 	private double calcHur(Intersection a, Intersection b) {
