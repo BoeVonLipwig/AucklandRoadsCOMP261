@@ -77,11 +77,6 @@ public class MapDraw extends GUI {
 				artPoint.setHighlighted(4);
 				artPoint.draw(g, origin, zoom);
 			}
-		}else{
-			for (Intersection artPoint : artPoints) {
-				artPoint.setHighlighted(1);
-				artPoint.draw(g, origin, zoom);
-			}
 		}
 	}
 
